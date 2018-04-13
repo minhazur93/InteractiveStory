@@ -14,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Stack;
+
 public class StoryActivity extends AppCompatActivity {
 
     private Story story;
@@ -23,6 +25,7 @@ public class StoryActivity extends AppCompatActivity {
     private Button choiceTwoButton;
     private String name;
     Page page;
+    Stack<Integer> pageStack = new Stack<Integer>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +44,8 @@ public class StoryActivity extends AppCompatActivity {
     }
 
     private void loadPage(int pageNumber) {
+
+        pageStack.push(pageNumber);
 
         Toast.makeText(this, String.valueOf(pageNumber), Toast.LENGTH_SHORT).show();
 
@@ -86,15 +91,13 @@ public class StoryActivity extends AppCompatActivity {
         });
     }
 
-//    @Override
-//    public boolean onKeyDown(int keyCode, KeyEvent event) {
-//        if (keyCode == KeyEvent.KEYCODE_BACK) {
-//            loadPage(page.getPageNumber()-1);
-//            return true;
-//        }
-//
-//        return super.onKeyDown(keyCode, event);
-//    }
-
-
+    @Override
+    public void onBackPressed() {
+        pageStack.pop();
+        if(pageStack.isEmpty()){
+            super.onBackPressed();
+        } else {
+            loadPage(pageStack.pop());
+        }
+    }
 }
